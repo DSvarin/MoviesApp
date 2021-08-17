@@ -44,7 +44,6 @@ const MovieList = ({
   const hasData = !(loading || error);
 
   const totalPageAmount = tab === 'Rated' ? ratedMoviesTotal : totalPage * 20;
-  console.log(ratedMoviesTotal);
 
   const errorMess = error ? (
     <Alert type="error" message="Whoops!" description="Sorry! We lost movies. Someone stole them." />

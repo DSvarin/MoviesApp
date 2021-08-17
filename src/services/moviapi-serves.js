@@ -52,7 +52,7 @@ export default class MoviesapiService {
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
         },
-        body: JSON.stringify({ value: value }),
+        body: JSON.stringify({ value }),
       }
     );
 

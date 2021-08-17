@@ -38,11 +38,21 @@ export default class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.query !== prevState.query) {
-      this.updateMovies();
       this.updateTotalPage();
+      this.updateMovies();
     }
     if (this.state.currentPage !== prevState.currentPage) {
+      if (this.state.tab === 'Rated') {
+        this.updateRatedMovies();
+      }
       this.updateMovies();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+    if (this.state.tab !== prevState.tab && this.state.tab === 'Rated') {
+      this.updateRatedMovies();
     }
   }
 
@@ -88,6 +98,13 @@ export default class App extends Component {
     });
   };
 
+  onRatedMoviesLoaded = (ratedMoviesServer) => {
+    this.setState({
+      ratedMoviesServer,
+      loading: false,
+    });
+  };
+
   onError = () => {
     this.setState({
       error: true,
@@ -96,45 +113,39 @@ export default class App extends Component {
   };
 
   onQueryChange = (query) => {
-    this.setState({ query });
+    this.setState({ query, currentPage: 1 });
   };
 
   onPageChange = (currentPage) => {
     this.setState({ currentPage });
   };
 
-  onTabRated = (sessionId, page) => {
-    console.log(page);
-    this.moviesapiService
-      .getRatedMovies(sessionId, page)
-      .then((ratedMoviesServer) => this.setState({ ratedMoviesServer }))
-      .catch(this.onError);
-  };
-
   onTabChange = (tab) => {
-    this.setState({ tab });
-    this.setState({ currentPage: 1 });
-    if (tab === 'Rated') {
-      const { guestSessionId } = this.state;
-
-      this.moviesapiService
-        .getRatedMoviesTotal(guestSessionId)
-        .then((ratedMoviesTotal) => this.setState({ ratedMoviesTotal }))
-        .catch(this.onError);
-      const { currentPage } = this.state;
-
-      this.onTabRated(guestSessionId, currentPage);
-    }
+    this.setState({ tab, currentPage: 1 });
   };
 
   onIdCreated = (guestSessionId) => {
     this.setState({ guestSessionId });
   };
 
+  updateRatedMovies() {
+    const { guestSessionId, currentPage } = this.state;
+
+    this.moviesapiService
+      .getRatedMoviesTotal(guestSessionId)
+      .then((ratedMoviesTotal) => this.setState({ ratedMoviesTotal }))
+      .catch(this.onError);
+
+    this.moviesapiService
+      .getRatedMovies(guestSessionId, currentPage)
+      .then(this.onRatedMoviesLoaded)
+      .catch(this.onError);
+  }
+
   updateMovies() {
     const { query, currentPage } = this.state;
     if (!query || !currentPage) {
-      return;
+      this.setState({ query: 'return', currentPage: 1 });
     }
 
     this.moviesapiService.searchMovies(query, currentPage).then(this.onMoviesLoaded).catch(this.onError);
@@ -161,7 +172,6 @@ export default class App extends Component {
       ratedMoviesServer,
       ratedMoviesTotal,
     } = this.state;
-    console.log(this.state);
 
     const movieSearch = tab === 'Search' ? <MovieSearch onQueryChange={this.onQueryChange} /> : null;
 
