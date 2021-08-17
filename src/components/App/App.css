@@ -14,3 +14,14 @@
     }
 }
 
+@media(min-width: 767px) {
+    .main {
+        min-width: 522px;
+    }
+}
+
+@media(min-width: 1023px) {
+    .main {
+        width:1010px
+    }
+}
