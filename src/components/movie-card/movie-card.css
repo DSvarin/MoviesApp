@@ -109,3 +109,24 @@ ul.ant-rate {
 li.ant-rate-star:not(:last-child) {
     margin-right: 3px;
 }
+
+@media(max-width: 767px) {
+    .movie-item {
+        width: 387px;
+        height: 245px;
+    }
+    .movie-item__poster {
+        width: 60px;
+        height: 91px;
+    }
+
+    .movie-item__info {
+        width: 320px;
+    }
+
+    .movie-item__overview {
+        position: relative;
+        left: -60px;
+        width: 367px
+    }
+}

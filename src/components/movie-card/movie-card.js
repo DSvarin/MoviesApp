@@ -118,6 +118,13 @@ MovieCard.propTypes = {
 export default MovieCard;
 
 const Genres = ({ genresArr }) => {
+  if (genresArr.length === 0) {
+    return (
+      <ul className="movie-item__genres">
+        <li>Unknown</li>
+      </ul>
+    );
+  }
   const genre = genresArr.map((item) => <li key={item}> {item} </li>);
   return <ul className="movie-item__genres"> {genre} </ul>;
 };

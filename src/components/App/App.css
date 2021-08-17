@@ -1,11 +1,16 @@
 .main {
-    width: 1010px;
+    max-width: 1010px;
+    min-width: 420px;
     padding: 34px;
     background-color: #FFFFFF;
     text-align: center;
     display: flex;
     flex-direction: column;
-
 }
 
+@media(max-width: 767px) {
+    .main {
+        padding: 34px 16px;
+    }
+}
 
