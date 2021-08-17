@@ -1,0 +1,11 @@
+.main {
+    width: 1010px;
+    padding: 34px;
+    background-color: #FFFFFF;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+
+}
+
+

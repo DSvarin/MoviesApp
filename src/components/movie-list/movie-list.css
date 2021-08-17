@@ -1,0 +1,9 @@
+.move-list {
+    padding: 0 0 32px 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
