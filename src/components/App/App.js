@@ -57,7 +57,7 @@ export default class App extends Component {
   }
 
   componentDidCatch() {
-    this.setState({ error: true });
+    this.onError();
   }
 
   addRatedMovie = (movieId, rating) => {
@@ -87,21 +87,18 @@ export default class App extends Component {
   onPagesLoaded = (totalPage) => {
     this.setState({
       totalPage,
-      loading: false,
     });
   };
 
   onGenresLoaded = (genres) => {
     this.setState({
       genres,
-      loading: false,
     });
   };
 
   onRatedMoviesLoaded = (ratedMoviesServer) => {
     this.setState({
       ratedMoviesServer,
-      loading: false,
     });
   };
 

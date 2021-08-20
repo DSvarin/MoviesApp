@@ -15,9 +15,6 @@ const MovieSearch = ({ onQueryChange }) => {
   const onPressEnter = (event) => {
     if (event.key === 'Enter') {
       onQueryChange(event.target.value);
-      // eslint-disable-next-line no-param-reassign
-      event.target.value = '';
-      document.querySelector('input').blur();
     }
   };
 

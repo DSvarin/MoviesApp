@@ -20,14 +20,6 @@ const MovieList = ({
   ratedMoviesServer,
   ratedMoviesTotal,
 }) => {
-  if (!movies) {
-    return <Spin size="large" />;
-  }
-
-  if (movies.length === 0) {
-    return <Alert type="info" message="Whoops!" description="Could not find this movie." />;
-  }
-
   const createMovieCards = (moviesArr) =>
     moviesArr.map((item) => {
       const { id } = item;
@@ -39,29 +31,37 @@ const MovieList = ({
       );
     });
 
-  const elements = tab === 'Rated' ? createMovieCards(ratedMoviesServer) : createMovieCards(movies);
-
-  const hasData = !(loading || error);
-
   const totalPageAmount = tab === 'Rated' ? ratedMoviesTotal : totalPage * 20;
 
   const errorMess = error ? (
     <Alert type="error" message="Whoops!" description="Sorry! We lost movies. Someone stole them." />
   ) : null;
+
   const spinner = loading ? <Spin size="large" /> : null;
-  const content = hasData ? (
-    <>
-      <ul className="move-list"> {elements} </ul>
-      <Pagination
-        current={currentPage}
-        size="small"
-        pageSize={20}
-        total={totalPageAmount}
-        onChange={onPageChange}
-        showSizeChanger={false}
-      />
-    </>
-  ) : null;
+
+  let content;
+
+  if (!(loading || error)) {
+    if (movies.length === 0) {
+      return <Alert type="info" message="Whoops!" description="Could not find this movie." />;
+    }
+
+    const elements = tab === 'Rated' ? createMovieCards(ratedMoviesServer) : createMovieCards(movies);
+
+    content = (
+      <>
+        <ul className="move-list"> {elements} </ul>
+        <Pagination
+          current={currentPage}
+          size="small"
+          pageSize={20}
+          total={totalPageAmount}
+          onChange={onPageChange}
+          showSizeChanger={false}
+        />
+      </>
+    );
+  }
 
   return (
     <>
