@@ -1,36 +1,73 @@
 /* eslint-disable react/destructuring-assignment */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import debounce from 'lodash.debounce';
 
 import './movie-search.css';
 
-const MovieSearch = ({ onQueryChange }) => {
-  const onSearchChange = (event) => {
-    onQueryChange(event.target.value);
+export default class MovieSearch extends Component {
+  state = {
+    value: '',
   };
 
-  const onPressEnter = (event) => {
+  static defaultProps = {
+    onQueryChange: () => {},
+  };
+
+  static propTypes = {
+    onQueryChange: PropTypes.func,
+  };
+
+  onSearchChange = (event) => {
+    this.props.onQueryChange(event.target.value);
+  };
+
+  onPressEnter = (event) => {
+    event.preventDefault();
+
+    const regexp = /\b.{1}\b/;
+
+    if (regexp.test(event.key)) {
+      this.setState(({ value }) => {
+        const oldValue = value;
+        const newValue = oldValue + event.key;
+
+        return {
+          value: newValue,
+        };
+      });
+    }
+
+    if (event.key === 'Backspace') {
+      this.setState(({ value }) => {
+        const oldValue = value;
+        const newValue = oldValue.slice(0, oldValue.length - 1);
+
+        return {
+          value: newValue,
+        };
+      });
+    }
+
     if (event.key === 'Enter') {
-      onQueryChange(event.target.value);
+      setTimeout(() => {
+        this.setState({ value: '' });
+      }, 350);
     }
   };
 
-  return (
-    <div className="search-panel">
-      <input placeholder="Type to search..." onKeyUp={onPressEnter} onChange={debounce(onSearchChange, 500)} />
-    </div>
-  );
-};
-
-MovieSearch.defaultProps = {
-  onQueryChange: () => {},
-};
-
-MovieSearch.propTypes = {
-  onQueryChange: PropTypes.func,
-};
-
-export default MovieSearch;
+  render() {
+    return (
+      <div className="search-panel">
+        <input
+          placeholder="Type to search..."
+          value={this.state.value}
+          onKeyUp={this.onPressEnter}
+          onChange={debounce(this.onSearchChange, 500)}
+        />
+      </div>
+    );
+  }
+}
